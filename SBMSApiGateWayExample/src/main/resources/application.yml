@@ -1,0 +1,39 @@
+server:
+  port: 6789
+
+spring:
+  application:
+    name: API-GATEWAY
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      routes:
+        - id: booking-service
+          uri: lb://booking-service
+          predicates:
+            - Path=/booking/**
+
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/payment/**
+
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/notify/**
+
+        - id: orchestrator-service
+          uri: lb://orchestrator-service
+          predicates:
+            - Path=/orchestrator/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
